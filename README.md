@@ -1,7 +1,7 @@
 # Wokwi-Chip-PWM
 ## Description
 
-PWM Signal Generator ⎍⎍⎍⎍⎍
+PWM Signal Generator  ⎍⎍⎍⎍
 
 - 0 - 10,100 Hz
 - 0 - 100 % duty 
