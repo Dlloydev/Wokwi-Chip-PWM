@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "name": "PWM",
+  "author": "dlloydev",
+  "license": "MIT",
+  "docs": "https://github.com/Dlloydev/Wokwi-Chip-PWM/blob/main/docs/README.md",
+  "pins": [
+    "VCC",
+    "GND",
+    "OUT",
+    ""
+  ],
+  "controls": [
+    {
+      "id": "coarseHz",
+      "label": "Coarse Hz",
+      "type": "range",
+      "min": 0,
+      "max": 10000,
+      "step": 100
+    },
+    {
+      "id": "fineHz",
+      "label": "Fine Hz",
+      "type": "range",
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "id": "duty",
+      "label": "Duty %",
+      "type": "range",
+      "min": 0,
+      "max": 100,
+      "step": 1
+    }
+  ]
+}
