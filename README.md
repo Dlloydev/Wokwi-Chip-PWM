@@ -3,10 +3,10 @@
 
 PWM Signal Generator ⎍⎍⎍⎍⎍
 
-➤  0 - 10,100 Hz
-➤  0 - 100 % duty 
+- 0 - 10,100 Hz
+- 0 - 100 % duty 
 
-The actual source code for the chip lives in [src/main.c](src/main.c), and the pins are described in [chip.json](chip.json).
+The actual source code for the chip lives in [src/main.c](https://github.com/Dlloydev/Wokwi-Chip-PWM/blob/main/src/main.c), and the pins are described in [chip.json](https://github.com/Dlloydev/Wokwi-Chip-PWM/blob/main/chip.json).
 
 ## Examples
 
@@ -14,5 +14,5 @@ The actual source code for the chip lives in [src/main.c](src/main.c), and the p
 
 ## License
 
-This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the MIT license. See the [LICENSE](https://github.com/Dlloydev/Wokwi-Chip-PWM/blob/main/LICENSE) file for more details.
 
