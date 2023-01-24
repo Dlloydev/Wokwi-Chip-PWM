@@ -3,46 +3,17 @@
   "author": "Dlloydev",
   "editor": "wokwi",
   "parts": [
-    { "type": "chip-pwm", "id": "chip1", "top": -85.42, "left": -113.66, "attrs": {} },
+    { "type": "chip-pwm", "id": "chip1", "top": -85.42, "left": -108.33, "attrs": {} },
     { "type": "wokwi-logic-analyzer", "id": "logic1", "top": -76.45, "left": 29.29, "attrs": {} },
     { "type": "wokwi-vcc", "id": "pwr2", "top": -116.28, "left": -132.25, "attrs": {} },
-    { "type": "wokwi-gnd", "id": "gnd1", "top": -16.04, "left": -132.42, "attrs": {} },
-    {
-      "type": "wokwi-buzzer",
-      "id": "bz1",
-      "top": -27.67,
-      "left": -79.65,
-      "rotate": 180,
-      "attrs": { "volume": "0.1" }
-    },
-    {
-      "type": "wokwi-led",
-      "id": "led1",
-      "top": -53.96,
-      "left": -174.15,
-      "rotate": 270,
-      "attrs": { "color": "white", "lightColor": "red", "gamma": "1.0" }
-    },
-    {
-      "type": "wokwi-resistor",
-      "id": "r1",
-      "top": -39.89,
-      "left": -111.1,
-      "rotate": 180,
-      "attrs": { "value": "1000" }
-    },
-    { "type": "wokwi-gnd", "id": "gnd2", "top": 18.29, "left": 6.15, "attrs": {} }
+    { "type": "wokwi-gnd", "id": "gnd1", "top": -61.48, "left": -133.65, "attrs": {} },
+    { "type": "wokwi-gnd", "id": "gnd2", "top": 14.69, "left": 7.14, "attrs": {} }
   ],
   "connections": [
     [ "chip1:OUT", "logic1:D0", "blue", [ "v0" ] ],
     [ "pwr2:VCC", "chip1:VCC", "red", [ "v0" ] ],
-    [ "r1:1", "chip1:OUT", "blue", [ "v0.06", "h67.44", "v-32.76" ] ],
-    [ "bz1:1", "gnd2:GND", "gray", [ "v-1.35", "h47.84", "v47.31" ] ],
     [ "logic1:GND", "gnd2:GND", "gray", [ "h0" ] ],
-    [ "bz1:2", "r1:1", "blue", [ "v-7.8", "h-23.44" ] ],
-    [ "led1:C", "gnd1:GND", "gray", [ "h0" ] ],
-    [ "gnd1:GND", "chip1:GND", "gray", [ "v0" ] ],
-    [ "r1:2", "led1:A", "blue", [ "v0" ] ]
+    [ "gnd1:GND", "chip1:GND", "gray", [ "v0" ] ]
   ],
-  "dependencies": { "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.0" }
+  "dependencies": { "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.1" }
 }

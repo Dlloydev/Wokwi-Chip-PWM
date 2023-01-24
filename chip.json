@@ -12,27 +12,59 @@
   ],
   "controls": [
     {
-      "id": "coarseHz",
-      "label": "Coarse Hz",
+      "id": "Hz_x10000",
+      "label": "Hz x 10000",
       "type": "range",
       "min": 0,
-      "max": 10000,
+      "max": 100000,
+      "step": 10000
+    },
+    {
+      "id": "Hz_x1000",
+      "label": "Hz x 1000",
+      "type": "range",
+      "min": 0,
+      "max": 9000,
+      "step": 1000
+    },
+    {
+      "id": "Hz_x100",
+      "label": "Hz x 100",
+      "type": "range",
+      "min": 0,
+      "max": 900,
       "step": 100
     },
     {
-      "id": "fineHz",
-      "label": "Fine Hz",
+      "id": "Hz_x10",
+      "label": "Hz x 10",
       "type": "range",
       "min": 0,
-      "max": 100,
+      "max": 90,
+      "step": 10
+    },
+    {
+      "id": "Hz_x1",
+      "label": "Hz x 1",
+      "type": "range",
+      "min": 0,
+      "max": 9,
       "step": 1
     },
     {
-      "id": "duty",
-      "label": "Duty %",
+      "id": "duty_x10",
+      "label": "% Duty x 10",
       "type": "range",
       "min": 0,
       "max": 100,
+      "step": 10
+    },
+    {
+      "id": "duty_x1",
+      "label": "% Duty x 1",
+      "type": "range",
+      "min": 0,
+      "max": 9,
       "step": 1
     }
   ]
