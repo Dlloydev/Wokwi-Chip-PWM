@@ -7,8 +7,8 @@
   "pins": [
     "VCC",
     "GND",
-    "OUT",
-    ""
+    "",
+    "OUT"
   ],
   "controls": [
     {

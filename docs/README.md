@@ -4,11 +4,11 @@ This custom chip for [Wokwi](https://wokwi.com/) implements a simple PWM Signal 
 
 ## Pin names
 
-| Name | Description                             |
-| ---- | --------------------------------------- |
-| OUT  | PWM output,  0-100,000 Hz, 0-100 % duty |
-| GND  | Ground                                  |
-| VCC  | Supply voltage                          |
+| Name | Description                                                  |
+| ---- | ------------------------------------------------------------ |
+| OUT  | PWM output,  0-100,000 Hz (1000 Hz default), 0-100 % duty (50% duty default) |
+| GND  | Ground                                                       |
+| VCC  | Supply voltage                                               |
 
 ## Usage
 
@@ -19,7 +19,7 @@ To use this chip in your project, include it as a dependency in your `diagram.js
 
 ```json
   "dependencies": {
-    "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.1"
+    "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.2"
   }
 ```
 
@@ -28,7 +28,7 @@ Then, add the chip to your circuit by adding a `chip-pwm` item to the `parts` se
 ```json
   "parts": {
     ...,
-    { "type": "chip-pwm", "id": "chip1" }
+    { "type": "chip-pwm", "id": "pwm1" }
   },
 ```
 

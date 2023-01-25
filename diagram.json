@@ -3,17 +3,17 @@
   "author": "Dlloydev",
   "editor": "wokwi",
   "parts": [
-    { "type": "chip-pwm", "id": "chip1", "top": -85.42, "left": -108.33, "attrs": {} },
+    { "type": "chip-pwm", "id": "pwm1", "top": -85.42, "left": -108.33, "attrs": {} },
     { "type": "wokwi-logic-analyzer", "id": "logic1", "top": -76.45, "left": 29.29, "attrs": {} },
     { "type": "wokwi-vcc", "id": "pwr2", "top": -116.28, "left": -132.25, "attrs": {} },
     { "type": "wokwi-gnd", "id": "gnd1", "top": -61.48, "left": -133.65, "attrs": {} },
     { "type": "wokwi-gnd", "id": "gnd2", "top": 14.69, "left": 7.14, "attrs": {} }
   ],
   "connections": [
-    [ "chip1:OUT", "logic1:D0", "blue", [ "v0" ] ],
-    [ "pwr2:VCC", "chip1:VCC", "red", [ "v0" ] ],
+    [ "pwm1:OUT", "logic1:D0", "blue", [ "v0" ] ],
+    [ "pwr2:VCC", "pwm1:VCC", "red", [ "v0" ] ],
     [ "logic1:GND", "gnd2:GND", "gray", [ "h0" ] ],
-    [ "gnd1:GND", "chip1:GND", "gray", [ "v0" ] ]
+    [ "gnd1:GND", "pwm1:GND", "gray", [ "v0" ] ]
   ],
-  "dependencies": { "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.1" }
+  "dependencies": { "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.2" }
 }

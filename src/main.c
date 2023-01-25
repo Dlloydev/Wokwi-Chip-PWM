@@ -23,6 +23,8 @@ typedef struct {
   uint32_t dutyUs;
   uint32_t periodUs;
   uint32_t countUs;
+  uint32_t freq;
+  uint8_t tick;
 } chip_state_t;
 
 static void chip_timer_event(void *user_data);
@@ -31,7 +33,7 @@ void chip_init(void) {
   chip_state_t *chip = malloc(sizeof(chip_state_t));
   chip->pin_out = pin_init("OUT", OUTPUT);
   chip->Hz_x10000_attr = attr_init("Hz_x10000", 0);
-  chip->Hz_x1000_attr = attr_init("Hz_x1000", 0);
+  chip->Hz_x1000_attr = attr_init("Hz_x1000", 1000);
   chip->Hz_x100_attr = attr_init("Hz_x100", 0);
   chip->Hz_x10_attr = attr_init("Hz_x10", 0);
   chip->Hz_x1_attr = attr_init("Hz_x1", 0);
@@ -48,11 +50,14 @@ void chip_init(void) {
 
 static void chip_timer_event(void *user_data) {
   chip_state_t *chip = (chip_state_t*)user_data;
-  if (chip->countUs >= chip->periodUs || !(chip->Hz_x10000 + chip->Hz_x1000 + chip->Hz_x100 + chip->Hz_x10 + chip->Hz_x1)) chip->countUs = 0;
-  if (chip->duty_x10 < 100) {
-    if (chip->countUs >= chip->dutyUs || !chip->countUs) pin_write(chip->pin_out, 0);
-    else  pin_write(chip->pin_out, 1);
-  }
+  if (chip->periodUs > 1000000 || chip->countUs >= chip->periodUs)  chip->countUs = 0;
+  if (chip->duty_x10 == 100) pin_write(chip->pin_out, 1);
+  else if (chip->duty_x1 + chip->duty_x10 == 0) pin_write(chip->pin_out, 0);
+  else if (chip->countUs == 0 || chip->countUs > chip->dutyUs) pin_write(chip->pin_out, 0);
+  else  if ( chip->countUs < chip->dutyUs) pin_write(chip->pin_out, 1);
+
+if(chip->tick > 100) {
+  chip->tick =0;
   if (attr_read(chip->Hz_x10000_attr) != chip->Hz_x10000 ||
       attr_read(chip->Hz_x1000_attr) != chip->Hz_x1000 ||
       attr_read(chip->Hz_x100_attr) != chip->Hz_x100 ||
@@ -75,10 +80,15 @@ static void chip_timer_event(void *user_data) {
       chip->Hz_x1_attr = attr_init("Hz_x1", 0);
     }
     if (chip->duty_x10 == 100) pin_write(chip->pin_out, 1);
-    if (chip->Hz_x10000 || chip->Hz_x1000 || chip->Hz_x100 || chip->Hz_x10 || chip->Hz_x1) {
-      chip->periodUs = 1000000UL / (chip->Hz_x10000 + chip->Hz_x1000 + chip->Hz_x100 + chip->Hz_x10 + chip->Hz_x1);
+    chip->freq = chip->Hz_x10000 + chip->Hz_x1000 + chip->Hz_x100 + chip->Hz_x10 + chip->Hz_x1;
+    if (chip->freq) {
+      chip->periodUs = 1000000UL / chip->freq;
       chip->dutyUs = (((chip->duty_x10 + chip->duty_x1) * chip->periodUs) / 100);
+    } else {
+      chip->periodUs = 1000001UL; // frequency = 0; 
     }
   }
+ }
   chip->countUs++;
+  chip->tick++;
 }
