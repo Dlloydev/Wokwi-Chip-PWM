@@ -59,43 +59,42 @@ static void chip_timer_event(void *user_data) {
   else if (chip->countUs == 0 || chip->countUs > chip->dutyUs) pin_write(chip->pin_out, 0);
   else  if ( chip->countUs < chip->dutyUs) pin_write(chip->pin_out, 1);
 
-if(chip->tick > 100) {
-  chip->tick = 0;
-  if (attr_read(chip->Hz_x10000_attr) != chip->Hz_x10000 ||
-      attr_read(chip->Hz_x1000_attr) != chip->Hz_x1000 ||
-      attr_read(chip->Hz_x100_attr) != chip->Hz_x100 ||
-      attr_read(chip->Hz_x10_attr) != chip->Hz_x10 ||
-      attr_read(chip->Hz_x1_attr) != chip->Hz_x1 ||
-      attr_read_float(chip->Hz_x01_attr) != chip->Hz_x01 ||
-      attr_read(chip->duty_x10_attr) != chip->duty_x10 ||
-      attr_read(chip->duty_x1_attr) != chip->duty_x1) {
-    chip->Hz_x10000 = attr_read(chip->Hz_x10000_attr);
-    chip->Hz_x1000 = attr_read(chip->Hz_x1000_attr);
-    chip->Hz_x100 = attr_read(chip->Hz_x100_attr);
-    chip->Hz_x10 = attr_read(chip->Hz_x10_attr);
-    chip->Hz_x1 = attr_read(chip->Hz_x1_attr);
-    chip->Hz_x01 = attr_read_float(chip->Hz_x01_attr);
-    chip->duty_x10 = attr_read(chip->duty_x10_attr);
-    chip->duty_x1 = attr_read(chip->duty_x1_attr);
-    if (chip->duty_x10 == 100) chip->duty_x1_attr = attr_init("duty_x1", 0);
-    if (chip->Hz_x10000 == 100000) {
-      chip->Hz_x1000_attr = attr_init("Hz_x1000", 0);
-      chip->Hz_x100_attr = attr_init("Hz_x100", 0);
-      chip->Hz_x10_attr = attr_init("Hz_x10", 0);
-      chip->Hz_x1_attr = attr_init("Hz_x1", 0);
-      chip->Hz_x01_attr = attr_init_float("Hz_x01", 0.0);
+  if (chip->tick > 100) {
+    chip->tick = 0;
+    if (attr_read(chip->Hz_x10000_attr) != chip->Hz_x10000 ||
+        attr_read(chip->Hz_x1000_attr) != chip->Hz_x1000 ||
+        attr_read(chip->Hz_x100_attr) != chip->Hz_x100 ||
+        attr_read(chip->Hz_x10_attr) != chip->Hz_x10 ||
+        attr_read(chip->Hz_x1_attr) != chip->Hz_x1 ||
+        attr_read_float(chip->Hz_x01_attr) != chip->Hz_x01 ||
+        attr_read(chip->duty_x10_attr) != chip->duty_x10 ||
+        attr_read(chip->duty_x1_attr) != chip->duty_x1) {
+      chip->Hz_x10000 = attr_read(chip->Hz_x10000_attr);
+      chip->Hz_x1000 = attr_read(chip->Hz_x1000_attr);
+      chip->Hz_x100 = attr_read(chip->Hz_x100_attr);
+      chip->Hz_x10 = attr_read(chip->Hz_x10_attr);
+      chip->Hz_x1 = attr_read(chip->Hz_x1_attr);
+      chip->Hz_x01 = attr_read_float(chip->Hz_x01_attr);
+      chip->duty_x10 = attr_read(chip->duty_x10_attr);
+      chip->duty_x1 = attr_read(chip->duty_x1_attr);
+      if (chip->duty_x10 == 100) chip->duty_x1_attr = attr_init("duty_x1", 0);
+      if (chip->Hz_x10000 == 100000) {
+        chip->Hz_x1000_attr = attr_init("Hz_x1000", 0);
+        chip->Hz_x100_attr = attr_init("Hz_x100", 0);
+        chip->Hz_x10_attr = attr_init("Hz_x10", 0);
+        chip->Hz_x1_attr = attr_init("Hz_x1", 0);
+        chip->Hz_x01_attr = attr_init_float("Hz_x01", 0.0);
+      }
+      if (chip->duty_x10 == 100) pin_write(chip->pin_out, 1);
+      chip->freq = (float)(chip->Hz_x10000) + (float)(chip->Hz_x1000 + chip->Hz_x100 + chip->Hz_x10 + chip->Hz_x1) + chip->Hz_x01;
+      if (chip->freq == 0.0f) chip->periodUs = 99999999;
+      else {
+        chip->periodUs = (uint32_t)(1000000 / chip->freq);
+        chip->dutyUs = (((chip->duty_x10 + chip->duty_x1) * chip->periodUs) / 100);
+      }
+      //printf("periodUs: %d\n", chip->periodUs);
     }
-    if (chip->duty_x10 == 100) pin_write(chip->pin_out, 1);
-    chip->freq = (float)(chip->Hz_x10000) + (float)(chip->Hz_x1000 + chip->Hz_x100 + chip->Hz_x10 + chip->Hz_x1) + chip->Hz_x01;
-    if (chip->freq >= 0.1f) {
-      chip->periodUs = (uint32_t)(1000000 / chip->freq);
-      chip->dutyUs = (((chip->duty_x10 + chip->duty_x1) * chip->periodUs) / 100);
-    } else {
-      chip->periodUs = 10000001UL; // frequency = 0; 
-    }
-  //printf("periodUs: %d\n", chip->periodUs);
   }
- }
   chip->countUs++;
   chip->tick++;
 }
