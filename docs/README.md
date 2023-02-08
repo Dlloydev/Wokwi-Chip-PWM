@@ -7,8 +7,6 @@ This custom chip for [Wokwi](https://wokwi.com/) implements a simple PWM Signal 
 | Name | Description                                                  |
 | ---- | ------------------------------------------------------------ |
 | OUT  | PWM output,  0-100,000 Hz (1000 Hz default), 0-100 % duty (50% duty default) |
-| GND  | Ground                                                       |
-| VCC  | Supply voltage                                               |
 
 ## Usage
 
