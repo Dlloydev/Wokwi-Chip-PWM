@@ -53,11 +53,14 @@ void chip_init(void) {
 
 static void chip_timer_event(void *user_data) {
   chip_state_t *chip = (chip_state_t*)user_data;
-  if (chip->periodUs > 10000000 || chip->countUs >= chip->periodUs) chip->countUs = 0;
-  if (chip->duty_x10 == 100) pin_write(chip->pin_out, 1);
-  else if (chip->duty_x1 + chip->duty_x10 == 0) pin_write(chip->pin_out, 0);
-  else if (chip->countUs == 0 || chip->countUs > chip->dutyUs) pin_write(chip->pin_out, 0);
-  else  if ( chip->countUs < chip->dutyUs) pin_write(chip->pin_out, 1);
+
+  if (chip->duty_x1 + chip->duty_x10 == 0) pin_write(chip->pin_out, 0);
+  else if (chip->periodUs == 99999999) pin_write(chip->pin_out, 0);
+  else if (chip->duty_x10 == 100) pin_write(chip->pin_out, 1);
+  else if (chip->countUs <= chip->dutyUs) pin_write(chip->pin_out, 1);
+  else pin_write(chip->pin_out, 0);
+ 
+  if (chip->countUs >= chip->periodUs) chip->countUs = 0;
 
   if (chip->tick > 100) {
     chip->tick = 0;
