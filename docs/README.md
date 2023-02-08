@@ -19,7 +19,7 @@ To use this chip in your project, include it as a dependency in your `diagram.js
 
 ```json
   "dependencies": {
-    "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.2"
+    "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.3"
   }
 ```
 

@@ -5,10 +5,10 @@
   "license": "MIT",
   "docs": "https://github.com/Dlloydev/Wokwi-Chip-PWM/blob/main/docs/README.md",
   "pins": [
-    "VCC",
-    "GND",
     "",
-    "OUT"
+    "",
+    "OUT",
+    ""
   ],
   "controls": [
     {
@@ -50,6 +50,14 @@
       "min": 0,
       "max": 9,
       "step": 1
+    },
+    {
+      "id": "Hz_x01",
+      "label": "Hz x 01",
+      "type": "range",
+      "min": 0.0,
+      "max": 0.9,
+      "step": 0.1
     },
     {
       "id": "duty_x10",
