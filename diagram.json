@@ -1,15 +1,34 @@
 {
   "version": 1,
-  "author": "Dlloydev",
+  "author": "David Lloyd",
   "editor": "wokwi",
   "parts": [
-    { "type": "chip-pwm", "id": "pwm1", "top": -85.38, "left": -110.4, "attrs": {} },
-    { "type": "wokwi-logic-analyzer", "id": "logic1", "top": -76.45, "left": 29.29, "attrs": {} },
-    { "type": "wokwi-gnd", "id": "gnd2", "top": 14.69, "left": 7.14, "attrs": {} }
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": 255.45, "left": 66.69, "attrs": {} },
+    {
+      "type": "chip-pwm",
+      "id": "pwm1",
+      "top": -37.38,
+      "left": -61.6,
+      "attrs": { "coefficientHz": "10", "frequencyScale": "3", "duty": "50" }
+    },
+    {
+      "type": "chip-scope",
+      "id": "scope1",
+      "top": -27.78,
+      "left": 72,
+      "attrs": {
+        "sampleTimeUs": "100",
+        "sampleTimeMs": "0",
+        "triggerChannel": "0",
+        "triggerMode": "1",
+        "crtColor": "0",
+        "trace0Color": "14",
+        "trace1Color": "12",
+        "trace2Color": "10",
+        "trace3Color": "2"
+      }
+    }
   ],
-  "connections": [
-    [ "pwm1:OUT", "logic1:D0", "blue", [ "v0" ] ],
-    [ "logic1:GND", "gnd2:GND", "gray", [ "h0" ] ]
-  ],
-  "dependencies": { "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.3" }
+  "connections": [ [ "pwm1:OUT", "scope1:D0", "green", [ "v0" ] ] ],
+  "dependencies": { "chip-scope": "github:Dlloydev/Wokwi-Chip-Scope@1.0.7" }
 }

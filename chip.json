@@ -12,68 +12,28 @@
   ],
   "controls": [
     {
-      "id": "Hz_x10000",
-      "label": "Hz x 10000",
+      "id": "CoefficientHz",
+      "label": "Coefficient (Hz)",
       "type": "range",
       "min": 0,
-      "max": 100000,
-      "step": 10000
-    },
-    {
-      "id": "Hz_x1000",
-      "label": "Hz x 1000",
-      "type": "range",
-      "min": 0,
-      "max": 9000,
-      "step": 1000
-    },
-    {
-      "id": "Hz_x100",
-      "label": "Hz x 100",
-      "type": "range",
-      "min": 0,
-      "max": 900,
-      "step": 100
-    },
-    {
-      "id": "Hz_x10",
-      "label": "Hz x 10",
-      "type": "range",
-      "min": 0,
-      "max": 90,
-      "step": 10
-    },
-    {
-      "id": "Hz_x1",
-      "label": "Hz x 1",
-      "type": "range",
-      "min": 0,
-      "max": 9,
-      "step": 1
-    },
-    {
-      "id": "Hz_x01",
-      "label": "Hz x 01",
-      "type": "range",
-      "min": 0.0,
-      "max": 0.9,
+      "max": 10,
       "step": 0.1
     },
     {
-      "id": "duty_x10",
-      "label": "% Duty x 10",
+      "id": "ExponentHz",
+      "label": "Exponent (10^Y Hz)",
+      "type": "range",
+      "min": -2,
+      "max": 4,
+      "step": 1
+    },
+    {
+      "id": "Duty",
+      "label": "% Duty",
       "type": "range",
       "min": 0,
       "max": 100,
-      "step": 10
-    },
-    {
-      "id": "duty_x1",
-      "label": "% Duty x 1",
-      "type": "range",
-      "min": 0,
-      "max": 9,
-      "step": 1
+      "step": 0.1
     }
   ]
 }

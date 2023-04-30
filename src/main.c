@@ -1,32 +1,32 @@
-/* PWM Breakout by Dlloydev*/
+// PWM Chip v1.0.4 by David Lloyd
 
 #include "wokwi-api.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 typedef struct {
   pin_t pin_out;
-  uint32_t Hz_x10000_attr;
-  uint32_t Hz_x10000;
-  uint32_t Hz_x1000_attr;
-  uint32_t Hz_x1000;
-  uint32_t Hz_x100_attr;
-  uint32_t Hz_x100;
-  uint32_t Hz_x10_attr;
-  uint32_t Hz_x10;
-  uint32_t Hz_x1_attr;
-  uint32_t Hz_x1;
-  float Hz_x01_attr;
-  float Hz_x01;
-  uint32_t duty_x10_attr;
-  uint32_t duty_x10;
-  uint32_t duty_x1_attr;
-  uint32_t duty_x1;
+  uint32_t timerUs;
+
+  uint32_t CoefficientHz_attr; // control
+  uint32_t coefficientHz_attr; // diagram.json
+  float coefficientHz;
+
+  uint32_t ExponentHz_attr; // control
+  uint32_t exponentHz_attr; // diagram.json
+  float exponentHz;
+
+  uint32_t Duty_attr; // control
+  uint32_t duty_attr; // diagram.json
+  float duty;
+
+  float Hz;
   uint32_t dutyUs;
   uint32_t periodUs;
   uint32_t countUs;
-  float freq;
   uint8_t tick;
+  bool firstRun;
 } chip_state_t;
 
 static void chip_timer_event(void *user_data);
@@ -34,29 +34,41 @@ static void chip_timer_event(void *user_data);
 void chip_init(void) {
   chip_state_t *chip = malloc(sizeof(chip_state_t));
   chip->pin_out = pin_init("OUT", OUTPUT);
-  chip->Hz_x10000_attr = attr_init("Hz_x10000", 0);
-  chip->Hz_x1000_attr = attr_init("Hz_x1000", 1000);
-  chip->Hz_x100_attr = attr_init("Hz_x100", 0);
-  chip->Hz_x10_attr = attr_init("Hz_x10", 0);
-  chip->Hz_x1_attr = attr_init("Hz_x1", 0);
-  chip->Hz_x01_attr = attr_init_float("Hz_x01", 0.0);
-  chip->duty_x10_attr = attr_init("duty_x10", 50); // %
-  chip->duty_x1_attr = attr_init("duty_x1", 0); // %
+  chip->timerUs = 10;
+  chip->firstRun = true;
+
+  chip->coefficientHz_attr = attr_init_float("coefficientHz", 100.0);
+  chip->coefficientHz = attr_read_float(chip->coefficientHz_attr);
+  if (chip->coefficientHz < 0) chip->coefficientHz = 0;
+  else if (chip->coefficientHz > 10) chip->coefficientHz = 10;
+  chip->CoefficientHz_attr = attr_init_float("CoefficientHz", chip->coefficientHz);
+
+  chip->exponentHz_attr = attr_init_float("exponentHz", 1.0);
+  chip->exponentHz = attr_read_float(chip->exponentHz_attr);
+  if (chip->exponentHz < 0.01) chip->exponentHz = 0.01;
+  else if (chip->exponentHz > 4) chip->exponentHz = 4;
+  chip->ExponentHz_attr = attr_init_float("ExponentHz", chip->exponentHz);
+
+  chip->duty_attr = attr_init_float("duty", 100.0);
+  chip->duty = attr_read_float(chip->duty_attr);
+  if (chip->duty < 0) chip->duty = 0;
+  else if (chip->duty > 100) chip->duty = 100;
+  chip->Duty_attr = attr_init_float("Duty", chip->duty);
 
   const timer_config_t timer_config = {
     .callback = chip_timer_event,
     .user_data = chip,
   };
   timer_t timer_id = timer_init(&timer_config);
-  timer_start(timer_id, 1, true);
+  timer_start(timer_id, chip->timerUs, true);
 }
 
 static void chip_timer_event(void *user_data) {
   chip_state_t *chip = (chip_state_t*)user_data;
 
-  if (chip->duty_x1 + chip->duty_x10 == 0) pin_write(chip->pin_out, 0);
+  if (chip->duty == 0) pin_write(chip->pin_out, 0);
   else if (chip->periodUs == 99999999) pin_write(chip->pin_out, 0);
-  else if (chip->duty_x10 == 100) pin_write(chip->pin_out, 1);
+  else if (chip->duty == 100) pin_write(chip->pin_out, 1);
   else if (chip->countUs <= chip->dutyUs) pin_write(chip->pin_out, 1);
   else pin_write(chip->pin_out, 0);
  
@@ -64,40 +76,25 @@ static void chip_timer_event(void *user_data) {
 
   if (chip->tick > 100) {
     chip->tick = 0;
-    if (attr_read(chip->Hz_x10000_attr) != chip->Hz_x10000 ||
-        attr_read(chip->Hz_x1000_attr) != chip->Hz_x1000 ||
-        attr_read(chip->Hz_x100_attr) != chip->Hz_x100 ||
-        attr_read(chip->Hz_x10_attr) != chip->Hz_x10 ||
-        attr_read(chip->Hz_x1_attr) != chip->Hz_x1 ||
-        attr_read_float(chip->Hz_x01_attr) != chip->Hz_x01 ||
-        attr_read(chip->duty_x10_attr) != chip->duty_x10 ||
-        attr_read(chip->duty_x1_attr) != chip->duty_x1) {
-      chip->Hz_x10000 = attr_read(chip->Hz_x10000_attr);
-      chip->Hz_x1000 = attr_read(chip->Hz_x1000_attr);
-      chip->Hz_x100 = attr_read(chip->Hz_x100_attr);
-      chip->Hz_x10 = attr_read(chip->Hz_x10_attr);
-      chip->Hz_x1 = attr_read(chip->Hz_x1_attr);
-      chip->Hz_x01 = attr_read_float(chip->Hz_x01_attr);
-      chip->duty_x10 = attr_read(chip->duty_x10_attr);
-      chip->duty_x1 = attr_read(chip->duty_x1_attr);
-      if (chip->duty_x10 == 100) chip->duty_x1_attr = attr_init("duty_x1", 0);
-      if (chip->Hz_x10000 == 100000) {
-        chip->Hz_x1000_attr = attr_init("Hz_x1000", 0);
-        chip->Hz_x100_attr = attr_init("Hz_x100", 0);
-        chip->Hz_x10_attr = attr_init("Hz_x10", 0);
-        chip->Hz_x1_attr = attr_init("Hz_x1", 0);
-        chip->Hz_x01_attr = attr_init_float("Hz_x01", 0.0);
-      }
-      if (chip->duty_x10 == 100) pin_write(chip->pin_out, 1);
-      chip->freq = (float)(chip->Hz_x10000) + (float)(chip->Hz_x1000 + chip->Hz_x100 + chip->Hz_x10 + chip->Hz_x1) + chip->Hz_x01;
-      if (chip->freq == 0.0f) chip->periodUs = 99999999;
+    if (chip->firstRun || attr_read_float(chip->CoefficientHz_attr) != chip->coefficientHz ||
+        attr_read_float(chip->ExponentHz_attr) != chip->exponentHz ||
+        attr_read_float(chip->Duty_attr) != chip->duty) {
+        chip->coefficientHz = attr_read_float(chip->CoefficientHz_attr);
+        chip->exponentHz = attr_read_float(chip->ExponentHz_attr);
+        chip->duty = attr_read_float(chip->Duty_attr);
+        chip->Hz = chip->coefficientHz * pow(10, chip->exponentHz);
+      if (chip->duty == 100) pin_write(chip->pin_out, 1);
+      if (chip->Hz == 0.0f) chip->periodUs = 99999999;
       else {
-        chip->periodUs = (uint32_t)(1000000 / chip->freq);
-        chip->dutyUs = (((chip->duty_x10 + chip->duty_x1) * chip->periodUs) / 100);
+        chip->periodUs = (uint32_t)(1000000 / chip->Hz);
+        chip->dutyUs = ((chip->duty * chip->periodUs) / 100);
       }
-      //printf("periodUs: %d\n", chip->periodUs);
+       chip->firstRun = false;
     }
+  printf("chip->coefficientHz: %f\n", chip->coefficientHz);
+  printf("chip->exponentHz: %f\n", chip->exponentHz);
+  printf("chip->duty: %f\n", chip->duty);
   }
-  chip->countUs++;
+  chip->countUs += chip->timerUs;
   chip->tick++;
 }
