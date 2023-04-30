@@ -10,19 +10,19 @@ PWM Signal Generator  **⎍⎍⎍⎍**
 - Default control settings (below) can be changed in `diagram.json` 
 
   ```json
-  "attrs": { "coefficientHz": "10", "frequencyScale": "3", "duty": "50" }
+  "attrs": { "coefficientHz": "10", "exponentHz": "2", "duty": "50" }
   ```
 
   
 
-![image](https://user-images.githubusercontent.com/63488701/235357633-c48347e8-21cd-445f-81f4-9f1c403fcb3a.png)
+![image](https://user-images.githubusercontent.com/63488701/235367160-9d205e83-eea7-4d4d-bcc1-0eb18bc9aa30.png)
 
 ## Usage
 
 To use this chip in your project, include it as a dependency in your `diagram.json` file:
 
 ```json
-"dependencies": { "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.4" }
+"dependencies": { "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.5" }
 ```
 
 Then, add the chip to your circuit by adding a `chip-scope` item to the `parts` section of `diagram.json`:
@@ -35,7 +35,7 @@ Then, add the chip to your circuit by adding a `chip-scope` item to the `parts` 
       "id": "pwm1",
       "top": -37.38,
       "left": -61.6,
-      "attrs": { "coefficientHz": "10", "frequencyScale": "3", "duty": "50" }
+      "attrs": { "coefficientHz": "10", "exponentHz": "2", "duty": "50" }
     },
 ```
 

@@ -13,7 +13,7 @@
   "controls": [
     {
       "id": "CoefficientHz",
-      "label": "Coefficient (Hz)",
+      "label": "Coefficient Hz",
       "type": "range",
       "min": 0,
       "max": 10,
@@ -21,7 +21,7 @@
     },
     {
       "id": "ExponentHz",
-      "label": "Exponent (10^Y Hz)",
+      "label": "Exponent (10^Y) Hz",
       "type": "range",
       "min": -2,
       "max": 4,

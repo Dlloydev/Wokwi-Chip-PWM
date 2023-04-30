@@ -1,4 +1,4 @@
-// PWM Chip v1.0.4 by David Lloyd
+// PWM Chip v1.0.5 by David Lloyd
 
 #include "wokwi-api.h"
 #include <stdio.h>
