@@ -30,7 +30,7 @@
   ],
   "connections": [ [ "pwm1:OUT", "scope1:D0", "green", [ "v0" ] ] ],
   "dependencies": {
-    "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.5",
+    "chip-pwm": "github:Dlloydev/Wokwi-Chip-PWM@1.0.6",
     "chip-scope": "github:Dlloydev/Wokwi-Chip-Scope@1.0.7"
   }
 }

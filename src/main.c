@@ -1,4 +1,4 @@
-// PWM Chip v1.0.5 by David Lloyd
+// PWM Chip v1.0.6 by David Lloyd
 
 #include "wokwi-api.h"
 #include <stdio.h>
@@ -37,22 +37,40 @@ void chip_init(void) {
   chip->timerUs = 10;
   chip->firstRun = true;
 
-  chip->coefficientHz_attr = attr_init_float("coefficientHz", 100.0);
+  chip->coefficientHz_attr = attr_init_float("coefficientHz", 1);
   chip->coefficientHz = attr_read_float(chip->coefficientHz_attr);
-  if (chip->coefficientHz < 0) chip->coefficientHz = 0;
-  else if (chip->coefficientHz > 10) chip->coefficientHz = 10;
+  if (chip->coefficientHz < 0) {
+    printf("coefficientHz range is 0.0-10.0\n");
+    chip->coefficientHz = 0;
+  }
+  else if (chip->coefficientHz > 10) {
+    printf("coefficientHz range is 0.0-10.0\n");
+    chip->coefficientHz = 10;
+  }
   chip->CoefficientHz_attr = attr_init_float("CoefficientHz", chip->coefficientHz);
 
   chip->exponentHz_attr = attr_init_float("exponentHz", 1.0);
   chip->exponentHz = attr_read_float(chip->exponentHz_attr);
-  if (chip->exponentHz < 0.01) chip->exponentHz = 0.01;
-  else if (chip->exponentHz > 4) chip->exponentHz = 4;
+  if (chip->exponentHz < 0.01) {
+    printf("exponentHz options are 0.01, 0.1, 1, 2, 3, 4\n");
+    chip->exponentHz = 0.01;
+  }
+  else if (chip->exponentHz > 4) {
+    printf("exponentHz options are 0.01, 0.1, 1, 2, 3, 4\n");
+    chip->exponentHz = 4;
+  }
   chip->ExponentHz_attr = attr_init_float("ExponentHz", chip->exponentHz);
 
   chip->duty_attr = attr_init_float("duty", 100.0);
   chip->duty = attr_read_float(chip->duty_attr);
-  if (chip->duty < 0) chip->duty = 0;
-  else if (chip->duty > 100) chip->duty = 100;
+  if (chip->duty < 0) {
+    printf("duty range is 0-100\n");
+    chip->duty = 0;
+  }
+  else if (chip->duty > 100) {
+    printf("duty range is 0-100\n");
+    chip->duty = 100;
+  }
   chip->Duty_attr = attr_init_float("Duty", chip->duty);
 
   const timer_config_t timer_config = {
@@ -91,9 +109,6 @@ static void chip_timer_event(void *user_data) {
       }
        chip->firstRun = false;
     }
-  printf("chip->coefficientHz: %f\n", chip->coefficientHz);
-  printf("chip->exponentHz: %f\n", chip->exponentHz);
-  printf("chip->duty: %f\n", chip->duty);
   }
   chip->countUs += chip->timerUs;
   chip->tick++;
